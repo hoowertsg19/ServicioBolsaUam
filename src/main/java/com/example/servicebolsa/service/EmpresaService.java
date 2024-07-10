@@ -9,8 +9,17 @@ import org.springframework.mail.MailException;
 import org.springframework.stereotype.Service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+<<<<<<< HEAD
 
 import java.util.List;
+=======
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.List;
+import java.util.Optional;
+>>>>>>> d50a1d4 (Modificacion en las clases correspondientes a Empresa)
 
 @Service
 public class EmpresaService {
@@ -26,6 +35,11 @@ public class EmpresaService {
     @Autowired
     private EmailService emailService;
 
+<<<<<<< HEAD
+=======
+    private final String uploadDir = "path/to/upload/directory/";
+
+>>>>>>> d50a1d4 (Modificacion en las clases correspondientes a Empresa)
     public Empresa registrarEmpresa(Empresa empresa) {
         if (empresaRepository.existsByCorreoElectronico(empresa.getCorreoElectronico())) {
             logger.error("El correo electrónico ya está registrado: {}", empresa.getCorreoElectronico());
@@ -100,4 +114,60 @@ public class EmpresaService {
         logger.info("Empresas aprobadas: {}", empresasAprobadas.size());
         return empresasAprobadas;
     }
+<<<<<<< HEAD
 }
+=======
+
+    public boolean actualizarPassword(Long empresaId, String currentPassword, String newPassword) {
+        Optional<Cuenta> cuentaOptional = cuentaRepository.findByEmpresaId(empresaId);
+
+        if (cuentaOptional.isPresent()) {
+            Cuenta cuenta = cuentaOptional.get();
+
+            if (cuenta.getPassword().equals(currentPassword)) {
+                cuenta.setPassword(newPassword);
+                cuentaRepository.save(cuenta);
+                logger.info("Contraseña actualizada exitosamente para la empresa con ID: {}", empresaId);
+                return true;
+            } else {
+                logger.error("La contraseña actual no coincide para la empresa con ID: {}", empresaId);
+                return false;
+            }
+        } else {
+            logger.error("Cuenta no encontrada para la empresa con ID: {}", empresaId);
+            return false;
+        }
+    }
+
+    public void actualizarFotoPerfil(Long id, String urlFotoPerfil) {
+        Optional<Empresa> empresaOptional = empresaRepository.findById(id);
+        if (empresaOptional.isPresent()) {
+            Empresa empresa = empresaOptional.get();
+            empresa.setFotoPerfil(urlFotoPerfil);
+            empresaRepository.save(empresa);
+        } else {
+            throw new RuntimeException("Empresa no encontrada");
+        }
+    }
+
+    public String guardarArchivoYObtenerURL(MultipartFile file) throws IOException {
+        String fileName = file.getOriginalFilename();
+        File destinationFile = new File(uploadDir + fileName);
+        file.transferTo(destinationFile);
+        return "/uploads/" + fileName;
+    }
+    public Empresa updateEmpresa(Long id, Empresa empresaDetails) {
+        Empresa empresa = empresaRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Empresa no encontrada para el ID: " + id));
+
+        empresa.setNombre(empresaDetails.getNombre());
+        empresa.setCorreoElectronico(empresaDetails.getCorreoElectronico());
+        empresa.setUbicacion(empresaDetails.getUbicacion());
+        empresa.setTelefonoContacto(empresaDetails.getTelefonoContacto());
+        // Actualiza otros campos según sea necesario
+
+        return empresaRepository.save(empresa);
+    }
+}
+
+>>>>>>> d50a1d4 (Modificacion en las clases correspondientes a Empresa)

@@ -33,5 +33,9 @@ public class Empresa {
     @JsonManagedReference(value = "empresa-vacantes")
     private List<Vacante> vacantes;
 
+<<<<<<< HEAD
     // Getters y Setters
+=======
+    private String fotoPerfil; // Campo para almacenar la URL de la foto de perfil
+>>>>>>> d50a1d4 (Modificacion en las clases correspondientes a Empresa)
 }

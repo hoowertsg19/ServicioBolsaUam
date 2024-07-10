@@ -24,6 +24,10 @@ public class Vacante {
     private Boolean activa = true; // Por defecto, activa
     private Date fechaPublicacion;
     private Double salario; // Añadido el campo de salario
+<<<<<<< HEAD
+=======
+    private String moneda; // Añadir campo para la moneda
+>>>>>>> d50a1d4 (Modificacion en las clases correspondientes a Empresa)
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "empresa_id", nullable = false)
