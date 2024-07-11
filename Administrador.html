@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel del Administrador - Bolsa de Trabajo UAM</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: 'Roboto', sans-serif;
+            background-color: #f4f4f4;
+        }
+        .sidebar {
+            width: 200px;
+            height: 100vh;
+            background-color: #0099A8;
+            color: white;
+            position: fixed;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-top: 20px;
+        }
+        .profile-icon {
+            font-size: 80px;
+            margin-bottom: 20px;
+        }
+        .sidebar h1 {
+            font-size: 20px;
+            margin: 10px 0;
+        }
+        .sidebar p {
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+        .btn {
+            padding: 10px;
+            background-color: #007B8A;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 90%;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        .btn-back {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            background-color: #007B8A;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-bottom: 10px;
+            text-align: center;
+            text-decoration: none;
+            font-size: 16px;
+        }
+        .btn-back i {
+            margin-right: 5px;
+        }
+        .content {
+            margin-left: 200px;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .card {
+            width: 150px;
+            height: 100px;
+            background-color: white;
+            border-radius: 10px;
+            margin: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            text-align: center;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        .card i {
+            font-size: 40px;
+            color: #0099A8;
+        }
+        .card p {
+            margin-top: 10px;
+            font-size: 16px;
+            color: #333;
+        }
+        .table-container {
+            display: none;
+            width: 100%;
+            margin-top: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            text-align: left;
+            padding: 8px;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #0099A8;
+            color: white;
+        }
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar" id="sidebar">
+        <i class="fas fa-user-circle profile-icon"></i>
+        <h1>Erick Navarrete</h1>
+        <p>ericknav@uamv.edu.ni</p>
+        <button class="btn" onclick="showHomeOptions()">Inicio</button>
+        <button class="btn" onclick="showConfig()">Configuración</button>
+        <button class="btn" onclick="logout()">Cerrar Sesión</button>
+    </div>
+    <div class="content" id="homeOptions">
+        <div class="card" onclick="showSolicitudesRegistro()">
+            <i class="fas fa-user-plus"></i>
+            <p>Solicitudes de Registro</p>
+        </div>
+        <div class="card" onclick="alert('Solicitudes de Publicación')">
+            <i class="fas fa-book"></i>
+            <p>Solicitudes de Publicación</p>
+        </div>
+        <div class="card" onclick="alert('Usuarios Calificados')">
+            <i class="fas fa-users"></i>
+            <p>Usuarios Calificados</p>
+        </div>
+        <div class="card" onclick="alert('Reporte de Vacantes Publicadas')">
+            <i class="fas fa-chart-line"></i>
+            <p>Reporte de Vacantes Publicadas</p>
+        </div>
+        <div class="card" onclick="showApprovedUsers()">
+            <i class="fas fa-check-circle"></i>
+            <p>Usuarios Aprobados</p>
+        </div>
+    </div>
+    <div class="table-container" id="approvedUsers" style="display: none;">
+        <button class="btn-back" onclick="showHomeOptions()">
+            <i class="fas fa-arrow-left"></i>Atrás
+        </button>
+        <h2>Usuarios Aprobados</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Correo Electrónico</th>
+                    <th>Teléfono de Contacto</th>
+                    <th>Ubicación</th>
+                </tr>
+            </thead>
+            <tbody id="usuariosAprobadosTabla">
+                <!-- Las filas se agregarán dinámicamente aquí -->
+            </tbody>
+        </table>
+    </div>
+    <div class="table-container" id="solicitudesRegistroPanel" style="display: none;">
+        <button class="btn-back" onclick="showHomeOptions()">
+            <i class="fas fa-arrow-left"></i>Atrás
+        </button>
+        <h2>Solicitudes de Registro</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Tipo de Usuario</th>
+                    <th>Correo Electrónico</th>
+                    <th>Fecha de solicitud</th>
+                    <th>Estado de la solicitud</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody id="solicitudesTabla">
+                <!-- Las filas se agregarán dinámicamente aquí -->
+            </tbody>
+        </table>
+    </div>
+    <script>
+        function showHomeOptions() {
+            document.getElementById('homeOptions').style.display = 'flex';
+            document.getElementById('approvedUsers').style.display = 'none';
+            document.getElementById('solicitudesRegistroPanel').style.display = 'none';
+            document.getElementById('sidebar').style.display = 'flex';
+        }
+
+        function showApprovedUsers() {
+            document.getElementById('homeOptions').style.display = 'none';
+            document.getElementById('approvedUsers').style.display = 'block';
+            document.getElementById('solicitudesRegistroPanel').style.display = 'none';
+            document.getElementById('sidebar').style.display = 'none'; // Hide sidebar
+            fetchApprovedUsers(); // Fetch data when showing the panel
+        }
+
+        function showSolicitudesRegistro() {
+            document.getElementById('homeOptions').style.display = 'none';
+            document.getElementById('approvedUsers').style.display = 'none';
+            document.getElementById('solicitudesRegistroPanel').style.display = 'block';
+            document.getElementById('sidebar').style.display = 'none'; // Hide sidebar
+            fetchSolicitudes(); // Fetch data when showing the panel
+        }
+
+        function showConfig() {
+            // Placeholder for configuration function
+        }
+
+        function logout() {
+            alert('Cerrando sesión...');
+        }
+
+        function fetchSolicitudes() {
+            fetch('http://localhost:8081/api/admin/solicitudes')
+                .then(response => response.json())
+                .then(data => mostrarSolicitudes(data))
+                .catch(error => console.error('Error al cargar las solicitudes:', error));
+        }
+
+        function mostrarSolicitudes(solicitudes) {
+            const tbody = document.getElementById('solicitudesTabla');
+            tbody.innerHTML = ''; // Clear tbody before adding new content
+            solicitudes.forEach(solicitud => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${solicitud.nombre}</td>
+                    <td>${solicitud.tipoUsuario}</td>
+                    <td>${solicitud.correoElectronico}</td>
+                    <td>${solicitud.fechaSolicitud}</td>
+                    <td>${solicitud.estado}</td>
+                    <td>
+                        <button onclick="aprobarEmpresa(${solicitud.id})" class="btn btn-success">Aprobar</button>
+                        <button onclick="rechazarEmpresa(${solicitud.id})" class="btn btn-danger">Rechazar</button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        function aprobarEmpresa(id) {
+            fetch(`http://localhost:8081/api/admin/aprobar/${id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ confirmed: true })
+            })
+            .then(response => response.ok ? alert('Empresa aprobada con éxito') : response.text().then(text => alert('Error al aprobar empresa: ' + text)))
+            .catch(error => alert('Error al aprobar empresa: ' + error.message));
+        }
+
+        function rechazarEmpresa(id) {
+            fetch(`http://localhost:8081/api/admin/rechazar/${id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ confirmed: false })
+            })
+            .then(response => response.ok ? alert('Empresa rechazada con éxito') : response.text().then(text => alert('Error al rechazar empresa: ' + text)))
+            .catch(error => alert('Error al rechazar empresa: ' + error.message));
+        }
+
+        function fetchApprovedUsers() {
+            fetch('http://localhost:8081/api/admin/aprobadas')
+                .then(response => response.json())
+                .then(data => mostrarUsuariosAprobados(data))
+                .catch(error => console.error('Error al cargar los usuarios aprobados:', error));
+        }
+
+        function mostrarUsuariosAprobados(usuarios) {
+            const tbody = document.getElementById('usuariosAprobadosTabla');
+            tbody.innerHTML = ''; // Clear tbody before adding new content
+            usuarios.forEach(usuario => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${usuario.nombre}</td>
+                    <td>${usuario.correoElectronico}</td>
+                    <td>${usuario.telefonoContacto}</td>
+                    <td>${usuario.ubicacion}</td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+    </script>
+</body>
+</html>
