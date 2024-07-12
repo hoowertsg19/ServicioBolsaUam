@@ -14,9 +14,7 @@
             height: 100%;
             width: 100%;
             background-color: #f0f0f0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            transition: background-color 0.3s, color 0.3s;
         }
 
         .background {
@@ -26,7 +24,7 @@
             width: 100%;
             height: 100%;
             z-index: -1;
-            background: url('fondoAdmin.jpg') no-repeat center center/cover;
+            background: url('https://i.ibb.co/b5QDw5G/Whats-App-Image-2024-07-11-at-14-40-28-d7f697e2.jpg') no-repeat center center/cover;
             filter: blur(5px);
         }
 
@@ -36,49 +34,49 @@
             width: 100%;
             height: 100%;
             background-color: rgba(255, 255, 255, 0.8);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .container {
-            display: flex;
-            width: 80%;
-            height: 90%;
-            max-width: 1200px;
-            max-height: 800px;
-            box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
-            border-radius: 8px;
-            overflow: hidden;
-            margin: auto;
-            background: rgba(255, 255, 255, 0.5);
+            animation: fadeIn 2s ease-in-out;
         }
 
         .sidebar {
-            width: 250px;
-            height: 100%;
+            width: 220px;
+            height: 100vh;
             background-color: rgba(0, 153, 168, 0.9);
             color: white;
+            position: fixed;
             display: flex;
             flex-direction: column;
             align-items: center;
             padding-top: 20px;
             box-shadow: 2px 0 10px rgba(0,0,0,0.3);
+            transition: transform 0.3s ease-in-out;
+            overflow: hidden;
+        }
+
+        .sidebar:hover {
+            transform: translateX(-10px);
         }
 
         .profile-icon {
             font-size: 80px;
             margin-bottom: 20px;
+            transition: transform 0.3s ease-in-out, color 0.3s;
+        }
+
+        .profile-icon:hover {
+            transform: scale(1.1);
+            color: #005f6b;
         }
 
         .sidebar h1 {
             font-size: 24px;
             margin: 10px 0;
+            animation: fadeIn 1s ease-in-out;
         }
 
         .sidebar p {
             margin-bottom: 20px;
             font-size: 18px;
+            animation: fadeIn 1s ease-in-out;
         }
 
         .btn {
@@ -91,35 +89,65 @@
             width: 90%;
             text-align: center;
             margin-bottom: 15px;
+            transition: background-color 0.3s, transform 0.3s, box-shadow 0.3s;
             font-size: 18px;
         }
 
-      .content {
-            margin-left: 0px;
-            padding: 0px;
+        .btn:hover {
+            background-color: #005f6b;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-back {
+            display: flex;
+            align-items: center;
+            padding: 14px;
+            background-color: #007B8A;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            margin-bottom: 15px;
+            text-align: center;
+            text-decoration: none;
+            font-size: 18px;
+            transition: background-color 0.3s, transform 0.3s, box-shadow 0.3s;
+        }
+
+        .btn-back:hover {
+            background-color: #005f6b;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-back i {
+            margin-right: 10px;
+        }
+
+        .content {
+            margin-left: 220px;
+            padding: 20px;
             display: flex;
             justify-content: center;
             align-items: center;
             flex-wrap: wrap;
             transition: margin-left 0.3s ease-in-out;
             animation: slideIn 1s ease-in-out;
-            background: url('fondoAdmin.jpg') no-repeat center center/cover;
-            width: calc(100% - 220px); /* Adjust width considering the sidebar */
-            height: 100vh; /* Ensure it covers full height */
-}
-      .card {
+        }
+
+        .card {
             width: 180px;
-            height: 130px;
+            height: 140px;
             background-color: white;
             border-radius: 20px;
-            margin: 10px 20px 50px 20px; /* Ajusta los márgenes: superior, derecha, inferior, izquierda */
-            box-shadow: 0 6px 12    px rgba(0,0,0,0.1);
+            margin: 20px;
+            box-shadow: 0 6px 12px rgba(0,0,0,0.1);
             text-align: center;
             padding: 20px;
             cursor: pointer;
             transition: all 0.3s ease-in-out, box-shadow 0.3s;
-}
-
+        }
 
         .card:hover {
             transform: translateY(-8px) scale(1.05);
@@ -369,103 +397,119 @@
 <body>
     <div class="background"></div>
     <div class="overlay">
-        <div class="container">
-            <div class="sidebar" id="sidebar">
-                <i class="fas fa-user-circle profile-icon"></i>
-                <h1>Erick Navarrete</h1>
-                <p>ericknav@uamv.edu.ni</p>
-                <button class="btn" onclick="showHomeOptions()">Inicio</button>
-                <button class="btn" onclick="showConfig()">Configuración</button>
-                <button class="btn" onclick="logout()">Cerrar Sesión</button>
+        <div class="sidebar" id="sidebar">
+            <i class="fas fa-user-circle profile-icon"></i>
+            <h1>Erick Navarrete</h1>
+            <p>ericknav@uamv.edu.ni</p>
+            <button class="btn" onclick="showHomeOptions()">Inicio</button>
+            <button class="btn" onclick="showConfig()">Configuración</button>
+            <button class="btn" onclick="logout()">Cerrar Sesión</button>
+        </div>
+        <div class="content" id="homeOptions">
+            <div class="card" onclick="showSolicitudesRegistro()">
+                <i class="fas fa-user-plus"></i>
+                <p>Solicitudes de Registro</p>
             </div>
-            <div class="content" id="homeOptions">
-                <div class="card" onclick="showSolicitudesRegistro()">
-                    <i class="fas fa-user-plus"></i>
-                    <p>Solicitudes de Registro</p>
-                </div>
-                <div class="card" onclick="showSolicitudesPublicacion()">
-                    <i class="fas fa-book"></i>
-                    <p>Solicitudes de Publicación</p>
-                </div>
-                <div class="card" onclick="alert('Usuarios Calificados')">
-                    <i class="fas fa-users"></i>
-                    <p>Usuarios Calificados</p>
-                </div>
-                <div class="card" onclick="alert('Reporte de Vacantes Publicadas')">
-                    <i class="fas fa-chart-line"></i>
-                    <p>Reporte de Vacantes Publicadas</p>
-                </div>
-                <div class="card" onclick="showApprovedUsers()">
-                    <i class="fas fa-check-circle"></i>
-                    <p>Usuarios Aprobados</p>
-                </div>
+            <div class="card" onclick="showSolicitudesPublicacion()">
+                <i class="fas fa-book"></i>
+                <p>Solicitudes de Publicación</p>
             </div>
-            <div class="table-container" id="approvedUsers" style="display: none;">
-                <button class="btn-back" onclick="showHomeOptions()">
-                    <i class="fas fa-arrow-left"></i>Atrás
-                </button>
-                <h2>Usuarios Aprobados</h2>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Nombre</th>
-                            <th>Correo Electrónico</th>
-                            <th>Teléfono de Contacto</th>
-                            <th>Ubicación</th>
-                        </tr>
-                    </thead>
-                    <tbody id="usuariosAprobadosTabla">
-                        <!-- Las filas se agregarán dinámicamente aquí -->
-                    </tbody>
-                </table>
+            <div class="card" onclick="alert('Usuarios Calificados')">
+                <i class="fas fa-users"></i>
+                <p>Usuarios Calificados</p>
             </div>
-            <div class="table-container" id="solicitudesRegistroPanel" style="display: none;">
-                <button class="btn-back" onclick="showHomeOptions()">
-                    <i class="fas fa-arrow-left"></i>Atrás
-                </button>
-                <h2>Solicitudes de Registro</h2>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Nombre</th>
-                            <th>Tipo de Usuario</th>
-                            <th>Correo Electrónico</th>
-                            <th>Fecha de solicitud</th>
-                            <th>Estado de la solicitud</th>
-                            <th>Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody id="solicitudesTabla">
-                        <!-- Las filas se agregarán dinámicamente aquí -->
-                    </tbody>
-                </table>
+            <div class="card" onclick="showReporteVacantesPublicadas()">
+                <i class="fas fa-chart-line"></i>
+                <p>Reporte de Vacantes Publicadas</p>
             </div>
-            <div class="table-container" id="solicitudesPublicacionPanel" style="display: none;">
-                <button class="btn-back" onclick="showHomeOptions()">
-                    <i class="fas fa-arrow-left"></i>Atrás
-                </button>
-                <h2>Solicitudes de Publicación</h2>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Posición</th>
-                            <th>Empresa</th>
-                            <th>Fecha de Publicación</th>
-                            <th>Estado</th>
-                            <th>Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody id="publicacionesTabla">
-                        <!-- Las filas se agregarán dinámicamente aquí -->
-                    </tbody>
-                </table>
+            <div class="card" onclick="showApprovedUsers()">
+                <i class="fas fa-check-circle"></i>
+                <p>Usuarios Aprobados</p>
             </div>
-            <div class="config-screen" id="configScreen">
-                <button class="config-option" onclick="changePassword()">Cambiar Contraseña</button>
-                <button class="config-option" onclick="toggleDarkMode()">Activar/Desactivar Modo Oscuro</button>
-                <button class="config-option" onclick="closeConfig()">Cerrar</button>
-            </div>
+        </div>
+        <div class="table-container" id="approvedUsers" style="display: none;">
+            <button class="btn-back" onclick="showHomeOptions()">
+                <i class="fas fa-arrow-left"></i>Atrás
+            </button>
+            <h2>Usuarios Aprobados</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Correo Electrónico</th>
+                        <th>Teléfono de Contacto</th>
+                        <th>Ubicación</th>
+                    </tr>
+                </thead>
+                <tbody id="usuariosAprobadosTabla">
+                    <!-- Las filas se agregarán dinámicamente aquí -->
+                </tbody>
+            </table>
+        </div>
+        <div class="table-container" id="solicitudesRegistroPanel" style="display: none;">
+            <button class="btn-back" onclick="showHomeOptions()">
+                <i class="fas fa-arrow-left"></i>Atrás
+            </button>
+            <h2>Solicitudes de Registro</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Tipo de Usuario</th>
+                        <th>Correo Electrónico</th>
+                        <th>Fecha de solicitud</th>
+                        <th>Estado de la solicitud</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="solicitudesTabla">
+                    <!-- Las filas se agregarán dinámicamente aquí -->
+                </tbody>
+            </table>
+        </div>
+        <div class="table-container" id="solicitudesPublicacionPanel" style="display: none;">
+            <button class="btn-back" onclick="showHomeOptions()">
+                <i class="fas fa-arrow-left"></i>Atrás
+            </button>
+            <h2>Solicitudes de Publicación</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Título</th>
+                        <th>Empresa</th>
+                        <th>Fecha de Solicitud</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="vacantesTabla">
+                    <!-- Las filas se agregarán dinámicamente aquí -->
+                </tbody>
+            </table>
+        </div>
+        <div class="table-container" id="reporteVacantesPublicadasPanel" style="display: none;">
+            <button class="btn-back" onclick="showHomeOptions()">
+                <i class="fas fa-arrow-left"></i>Atrás
+            </button>
+            <h2>Reporte de Vacantes Publicadas</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Posición</th>
+                        <th>Empresa</th>
+                        <th>Ubicación</th>
+                        <th>Fecha de Publicación</th>
+                        <th>Salario</th>
+                    </tr>
+                </thead>
+                <tbody id="reporteVacantesPublicadasTabla">
+                    <!-- Las filas se agregarán dinámicamente aquí -->
+                </tbody>
+            </table>
+        </div>
+        <div class="config-screen" id="configScreen">
+            <button class="config-option" onclick="changePassword()">Cambiar Contraseña</button>
+            <button class="config-option" onclick="toggleDarkMode()">Activar/Desactivar Modo Oscuro</button>
+            <button class="config-option" onclick="closeConfig()">Cerrar</button>
         </div>
     </div>
     <script>
@@ -474,6 +518,7 @@
             document.getElementById('approvedUsers').style.display = 'none';
             document.getElementById('solicitudesRegistroPanel').style.display = 'none';
             document.getElementById('solicitudesPublicacionPanel').style.display = 'none';
+            document.getElementById('reporteVacantesPublicadasPanel').style.display = 'none';
             document.getElementById('configScreen').style.display = 'none';
             document.getElementById('sidebar').style.display = 'flex';
         }
@@ -483,6 +528,7 @@
             document.getElementById('approvedUsers').style.display = 'block';
             document.getElementById('solicitudesRegistroPanel').style.display = 'none';
             document.getElementById('solicitudesPublicacionPanel').style.display = 'none';
+            document.getElementById('reporteVacantesPublicadasPanel').style.display = 'none';
             document.getElementById('configScreen').style.display = 'none';
             document.getElementById('sidebar').style.display = 'none'; // Hide sidebar
             fetchApprovedUsers(); // Fetch data when showing the panel
@@ -493,6 +539,7 @@
             document.getElementById('approvedUsers').style.display = 'none';
             document.getElementById('solicitudesRegistroPanel').style.display = 'block';
             document.getElementById('solicitudesPublicacionPanel').style.display = 'none';
+            document.getElementById('reporteVacantesPublicadasPanel').style.display = 'none';
             document.getElementById('configScreen').style.display = 'none';
             document.getElementById('sidebar').style.display = 'none'; // Hide sidebar
             fetchSolicitudes(); // Fetch data when showing the panel
@@ -503,9 +550,21 @@
             document.getElementById('approvedUsers').style.display = 'none';
             document.getElementById('solicitudesRegistroPanel').style.display = 'none';
             document.getElementById('solicitudesPublicacionPanel').style.display = 'block';
+            document.getElementById('reporteVacantesPublicadasPanel').style.display = 'none';
             document.getElementById('configScreen').style.display = 'none';
             document.getElementById('sidebar').style.display = 'none'; // Hide sidebar
-            fetchPublicaciones(); // Fetch data when showing the panel
+            fetchSolicitudesPublicacion();
+        }
+
+        function showReporteVacantesPublicadas() {
+            document.getElementById('homeOptions').style.display = 'none';
+            document.getElementById('approvedUsers').style.display = 'none';
+            document.getElementById('solicitudesRegistroPanel').style.display = 'none';
+            document.getElementById('solicitudesPublicacionPanel').style.display = 'none';
+            document.getElementById('reporteVacantesPublicadasPanel').style.display = 'block';
+            document.getElementById('configScreen').style.display = 'none';
+            document.getElementById('sidebar').style.display = 'none'; // Hide sidebar
+            fetchVacantesAprobadas();
         }
 
         function showConfig() {
@@ -513,6 +572,7 @@
             document.getElementById('approvedUsers').style.display = 'none';
             document.getElementById('solicitudesRegistroPanel').style.display = 'none';
             document.getElementById('solicitudesPublicacionPanel').style.display = 'none';
+            document.getElementById('reporteVacantesPublicadasPanel').style.display = 'none';
             document.getElementById('configScreen').style.display = 'flex';
         }
 
@@ -523,6 +583,7 @@
 
         function toggleDarkMode() {
             document.body.classList.toggle('dark-mode');
+
             const elementsToToggle = [
                 document.querySelector('.overlay'),
                 document.querySelector('.sidebar'),
@@ -548,7 +609,7 @@
         }
 
         function logout() {
-        window.location.href = 'index.html';
+            alert('Cerrando sesión...');
         }
 
         function fetchSolicitudes() {
@@ -581,29 +642,51 @@
             });
         }
 
-        function fetchPublicaciones() {
-            fetch('http://localhost:8080/api/admin/publicaciones')
+        function fetchSolicitudesPublicacion() {
+            fetch('http://localhost:8080/api/admin/vacantes-pend')
                 .then(response => response.json())
-                .then(data => mostrarPublicaciones(data))
-                .catch(error => console.error('Error al cargar las publicaciones:', error));
+                .then(data => mostrarSolicitudesPublicacion(data))
+                .catch(error => console.error('Error al cargar las solicitudes de publicación:', error));
         }
 
-        function mostrarPublicaciones(vacantes) {
-            const tbody = document.getElementById('publicacionesTabla');
+        function mostrarSolicitudesPublicacion(vacantes) {
+            const tbody = document.getElementById('vacantesTabla');
             tbody.innerHTML = ''; // Clear tbody before adding new content
             vacantes.forEach(vacante => {
                 const row = document.createElement('tr');
                 row.id = `vacante-${vacante.id}`; // Add an ID to each row for easy removal
                 row.innerHTML = `
-                    <td>${vacante.id}</td>
                     <td>${vacante.posicion}</td>
                     <td>${vacante.empresa ? vacante.empresa.nombre : 'Desconocida'}</td>
                     <td>${new Date(vacante.fechaPublicacion).toLocaleDateString()}</td>
-                    <td>${vacante.autorizado ? 'Autorizada' : 'Pendiente'}</td>
                     <td>
                         <button onclick="aprobarVacante(${vacante.id})" class="btn btn-success">Aprobar</button>
                         <button onclick="rechazarVacante(${vacante.id})" class="btn btn-danger">Rechazar</button>
                     </td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        function fetchVacantesAprobadas() {
+            fetch('http://localhost:8080/api/admin/vacantes-aprobadas')
+                .then(response => response.json())
+                .then(data => mostrarVacantesAprobadas(data))
+                .catch(error => console.error('Error al cargar las vacantes aprobadas:', error));
+        }
+
+        function mostrarVacantesAprobadas(vacantes) {
+            const tbody = document.getElementById('reporteVacantesPublicadasTabla');
+            tbody.innerHTML = ''; // Clear tbody before adding new content
+            vacantes.forEach(vacante => {
+                const row = document.createElement('tr');
+                row.id = `vacante-aprobada-${vacante.id}`; // Add an ID to each row for easy removal
+                row.innerHTML = `
+                    <td>${vacante.posicion}</td>
+                    <td>${vacante.empresa ? vacante.empresa.nombre : 'Desconocida'}</td>
+                    <td>${vacante.ubicacion}</td>
+                    <td>${new Date(vacante.fechaPublicacion).toLocaleDateString()}</td>
+                    <td>${vacante.salario}</td>
                 `;
                 tbody.appendChild(row);
             });
@@ -713,3 +796,4 @@
     </script>
 </body>
 </html>
+
