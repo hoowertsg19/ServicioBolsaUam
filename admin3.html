@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel del Administrador - Bolsa de Trabajo UAM</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: 'Roboto', sans-serif;
+            height: 100%;
+            width: 100%;
+            background-color: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: url('fondoAdmin.jpg') no-repeat center center/cover;
+            filter: blur(5px);
+        }
+
+        .overlay {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            display: flex;
+            width: 80%;
+            height: 90%;
+            max-width: 1200px;
+            max-height: 800px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+            overflow: hidden;
+            margin: auto;
+            background: rgba(255, 255, 255, 0.5);
+        }
+
+        .sidebar {
+            width: 250px;
+            height: 100%;
+            background-color: rgba(0, 153, 168, 0.9);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-top: 20px;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.3);
+        }
+
+        .profile-icon {
+            font-size: 80px;
+            margin-bottom: 20px;
+        }
+
+        .sidebar h1 {
+            font-size: 24px;
+            margin: 10px 0;
+        }
+
+        .sidebar p {
+            margin-bottom: 20px;
+            font-size: 18px;
+        }
+
+        .btn {
+            padding: 14px;
+            background-color: #007B8A;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            width: 90%;
+            text-align: center;
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+
+      .content {
+            margin-left: 0px;
+            padding: 0px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            transition: margin-left 0.3s ease-in-out;
+            animation: slideIn 1s ease-in-out;
+            background: url('fondoAdmin.jpg') no-repeat center center/cover;
+            width: calc(100% - 220px); /* Adjust width considering the sidebar */
+            height: 100vh; /* Ensure it covers full height */
+}
+      .card {
+            width: 180px;
+            height: 130px;
+            background-color: white;
+            border-radius: 20px;
+            margin: 10px 20px 50px 20px; /* Ajusta los márgenes: superior, derecha, inferior, izquierda */
+            box-shadow: 0 6px 12    px rgba(0,0,0,0.1);
+            text-align: center;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease-in-out, box-shadow 0.3s;
+}
+
+
+        .card:hover {
+            transform: translateY(-8px) scale(1.05);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+
+        .card i {
+            font-size: 50px;
+            color: #0099A8;
+            transition: color 0.3s;
+        }
+
+        .card:hover i {
+            color: #007B8A;
+        }
+
+        .card p {
+            margin-top: 15px;
+            font-size: 20px;
+            color: #333;
+            transition: color 0.3s;
+        }
+
+        .card:hover p {
+            color: #007B8A;
+        }
+
+        .table-container {
+            display: none;
+            width: 100%;
+            margin-top: 20px;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            animation: tableFadeIn 1s ease-in-out;
+            background-color: white;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        th, td {
+            text-align: left;
+            padding: 15px;
+            border-bottom: 1px solid #ddd;
+            transition: background-color 0.3s, padding 0.3s;
+        }
+
+        th {
+            background-color: #0099A8;
+            color: white;
+            animation: thFadeIn 1s ease-in-out;
+        }
+
+        tr:hover {
+            background-color: #f5f5f5;
+            padding: 20px;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes tableFadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes thFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes explode {
+            0% { transform: scale(1); opacity: 1; }
+            100% { transform: scale(1.5) rotate(360deg); opacity: 0; }
+        }
+
+        @keyframes implode {
+            0% { transform: scale(0.5) rotate(-360deg); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .exploding {
+            animation: explode 0.5s forwards;
+        }
+
+        .imploding {
+            animation: implode 0.5s forwards;
+        }
+
+        .config-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.9);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9998;
+            display: none;
+        }
+
+        .config-option {
+            padding: 14px;
+            background-color: #007B8A;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            margin: 10px;
+            transition: background-color 0.3s, transform 0.3s, box-shadow 0.3s;
+            font-size: 18px;
+            text-align: center;
+            width: 200px;
+        }
+
+        .config-option:hover {
+            background-color: #005f6b;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .dark-mode {
+            background-color: #2c2c2c !important;
+            color: #f0f0f0 !important;
+        }
+
+        .dark-mode .sidebar {
+            background-color: rgba(0, 153, 168, 0.7) !important;
+        }
+
+        .dark-mode .btn {
+            background-color: #005f6b !important;
+            color: #f0f0f0 !important;
+        }
+
+        .dark-mode .btn-back {
+            background-color: #005f6b !important;
+            color: #f0f0f0 !important;
+        }
+
+        .dark-mode .card {
+            background-color: #333 !important;
+            color: #f0f0f0 !important;
+        }
+
+        .dark-mode .card p {
+            color: #f0f0f0 !important;
+        }
+
+        .dark-mode table {
+            background-color: #444 !important;
+            color: #f0f0f0 !important;
+        }
+
+        .dark-mode th {
+            background-color: #005f6b !important;
+            color: #f0f0f0 !important;
+        }
+
+        .dark-mode td {
+            background-color: #333 !important;
+            color: #f0f0f0 !important;
+        }
+
+        /* Asegúrate de que los botones regresen a su color original */
+        body:not(.dark-mode) .btn,
+        body:not(.dark-mode) .btn-back {
+            background-color: #007B8A;
+            color: white;
+        }
+
+        body:not(.dark-mode) .card {
+            background-color: white;
+            color: #333;
+        }
+
+        body:not(.dark-mode) .card p {
+            color: #333;
+        }
+
+        body:not(.dark-mode) table {
+            background-color: white;
+            color: black;
+        }
+
+        body:not(.dark-mode) th {
+            background-color: #0099A8;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="background"></div>
+    <div class="overlay">
+        <div class="container">
+            <div class="sidebar" id="sidebar">
+                <i class="fas fa-user-circle profile-icon"></i>
+                <h1>Erick Navarrete</h1>
+                <p>ericknav@uamv.edu.ni</p>
+                <button class="btn" onclick="showHomeOptions()">Inicio</button>
+                <button class="btn" onclick="showConfig()">Configuración</button>
+                <button class="btn" onclick="logout()">Cerrar Sesión</button>
+            </div>
+            <div class="content" id="homeOptions">
+                <div class="card" onclick="showSolicitudesRegistro()">
+                    <i class="fas fa-user-plus"></i>
+                    <p>Solicitudes de Registro</p>
+                </div>
+                <div class="card" onclick="showSolicitudesPublicacion()">
+                    <i class="fas fa-book"></i>
+                    <p>Solicitudes de Publicación</p>
+                </div>
+                <div class="card" onclick="alert('Usuarios Calificados')">
+                    <i class="fas fa-users"></i>
+                    <p>Usuarios Calificados</p>
+                </div>
+                <div class="card" onclick="alert('Reporte de Vacantes Publicadas')">
+                    <i class="fas fa-chart-line"></i>
+                    <p>Reporte de Vacantes Publicadas</p>
+                </div>
+                <div class="card" onclick="showApprovedUsers()">
+                    <i class="fas fa-check-circle"></i>
+                    <p>Usuarios Aprobados</p>
+                </div>
+            </div>
+            <div class="table-container" id="approvedUsers" style="display: none;">
+                <button class="btn-back" onclick="showHomeOptions()">
+                    <i class="fas fa-arrow-left"></i>Atrás
+                </button>
+                <h2>Usuarios Aprobados</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Correo Electrónico</th>
+                            <th>Teléfono de Contacto</th>
+                            <th>Ubicación</th>
+                        </tr>
+                    </thead>
+                    <tbody id="usuariosAprobadosTabla">
+                        <!-- Las filas se agregarán dinámicamente aquí -->
+                    </tbody>
+                </table>
+            </div>
+            <div class="table-container" id="solicitudesRegistroPanel" style="display: none;">
+                <button class="btn-back" onclick="showHomeOptions()">
+                    <i class="fas fa-arrow-left"></i>Atrás
+                </button>
+                <h2>Solicitudes de Registro</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Tipo de Usuario</th>
+                            <th>Correo Electrónico</th>
+                            <th>Fecha de solicitud</th>
+                            <th>Estado de la solicitud</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="solicitudesTabla">
+                        <!-- Las filas se agregarán dinámicamente aquí -->
+                    </tbody>
+                </table>
+            </div>
+            <div class="table-container" id="solicitudesPublicacionPanel" style="display: none;">
+                <button class="btn-back" onclick="showHomeOptions()">
+                    <i class="fas fa-arrow-left"></i>Atrás
+                </button>
+                <h2>Solicitudes de Publicación</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Posición</th>
+                            <th>Empresa</th>
+                            <th>Fecha de Publicación</th>
+                            <th>Estado</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="publicacionesTabla">
+                        <!-- Las filas se agregarán dinámicamente aquí -->
+                    </tbody>
+                </table>
+            </div>
+            <div class="config-screen" id="configScreen">
+                <button class="config-option" onclick="changePassword()">Cambiar Contraseña</button>
+                <button class="config-option" onclick="toggleDarkMode()">Activar/Desactivar Modo Oscuro</button>
+                <button class="config-option" onclick="closeConfig()">Cerrar</button>
+            </div>
+        </div>
+    </div>
+    <script>
+        function showHomeOptions() {
+            document.getElementById('homeOptions').style.display = 'flex';
+            document.getElementById('approvedUsers').style.display = 'none';
+            document.getElementById('solicitudesRegistroPanel').style.display = 'none';
+            document.getElementById('solicitudesPublicacionPanel').style.display = 'none';
+            document.getElementById('configScreen').style.display = 'none';
+            document.getElementById('sidebar').style.display = 'flex';
+        }
+
+        function showApprovedUsers() {
+            document.getElementById('homeOptions').style.display = 'none';
+            document.getElementById('approvedUsers').style.display = 'block';
+            document.getElementById('solicitudesRegistroPanel').style.display = 'none';
+            document.getElementById('solicitudesPublicacionPanel').style.display = 'none';
+            document.getElementById('configScreen').style.display = 'none';
+            document.getElementById('sidebar').style.display = 'none'; // Hide sidebar
+            fetchApprovedUsers(); // Fetch data when showing the panel
+        }
+
+        function showSolicitudesRegistro() {
+            document.getElementById('homeOptions').style.display = 'none';
+            document.getElementById('approvedUsers').style.display = 'none';
+            document.getElementById('solicitudesRegistroPanel').style.display = 'block';
+            document.getElementById('solicitudesPublicacionPanel').style.display = 'none';
+            document.getElementById('configScreen').style.display = 'none';
+            document.getElementById('sidebar').style.display = 'none'; // Hide sidebar
+            fetchSolicitudes(); // Fetch data when showing the panel
+        }
+
+        function showSolicitudesPublicacion() {
+            document.getElementById('homeOptions').style.display = 'none';
+            document.getElementById('approvedUsers').style.display = 'none';
+            document.getElementById('solicitudesRegistroPanel').style.display = 'none';
+            document.getElementById('solicitudesPublicacionPanel').style.display = 'block';
+            document.getElementById('configScreen').style.display = 'none';
+            document.getElementById('sidebar').style.display = 'none'; // Hide sidebar
+            fetchPublicaciones(); // Fetch data when showing the panel
+        }
+
+        function showConfig() {
+            document.getElementById('homeOptions').style.display = 'none';
+            document.getElementById('approvedUsers').style.display = 'none';
+            document.getElementById('solicitudesRegistroPanel').style.display = 'none';
+            document.getElementById('solicitudesPublicacionPanel').style.display = 'none';
+            document.getElementById('configScreen').style.display = 'flex';
+        }
+
+        function closeConfig() {
+            document.getElementById('configScreen').style.display = 'none';
+            showHomeOptions();
+        }
+
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark-mode');
+            const elementsToToggle = [
+                document.querySelector('.overlay'),
+                document.querySelector('.sidebar'),
+                document.querySelectorAll('.btn'),
+                document.querySelectorAll('.btn-back'),
+                document.querySelectorAll('.card'),
+                document.querySelectorAll('table'),
+                document.querySelectorAll('th'),
+                document.querySelectorAll('td')
+            ];
+
+            elementsToToggle.forEach(elements => {
+                if (elements.length) {
+                    elements.forEach(element => element.classList.toggle('dark-mode'));
+                } else if (elements) {
+                    elements.classList.toggle('dark-mode');
+                }
+            });
+        }
+
+        function changePassword() {
+            alert('Funcionalidad de cambio de contraseña pendiente de implementación.');
+        }
+
+        function logout() {
+        window.location.href = 'index.html';
+        }
+
+        function fetchSolicitudes() {
+            fetch('http://localhost:8080/api/admin/solicitudes')
+                .then(response => response.json())
+                .then(data => mostrarSolicitudes(data))
+                .catch(error => console.error('Error al cargar las solicitudes:', error));
+        }
+
+        function mostrarSolicitudes(solicitudes) {
+            const tbody = document.getElementById('solicitudesTabla');
+            tbody.innerHTML = ''; // Clear tbody before adding new content
+            solicitudes.forEach(solicitud => {
+                if (solicitud.estado !== 'rechazado') { // Exclude rejected solicitudes
+                    const row = document.createElement('tr');
+                    row.id = `solicitud-${solicitud.id}`; // Add an ID to each row for easy removal
+                    row.innerHTML = `
+                        <td>${solicitud.nombre}</td>
+                        <td>${solicitud.tipoUsuario}</td>
+                        <td>${solicitud.correoElectronico}</td>
+                        <td>${solicitud.fechaSolicitud}</td>
+                        <td>${solicitud.estado}</td>
+                        <td>
+                            <button onclick="aprobarEmpresa(${solicitud.id})" class="btn btn-success">Aprobar</button>
+                            <button onclick="rechazarEmpresa(${solicitud.id})" class="btn btn-danger">Rechazar</button>
+                        </td>
+                    `;
+                    tbody.appendChild(row);
+                }
+            });
+        }
+
+        function fetchPublicaciones() {
+            fetch('http://localhost:8080/api/admin/publicaciones')
+                .then(response => response.json())
+                .then(data => mostrarPublicaciones(data))
+                .catch(error => console.error('Error al cargar las publicaciones:', error));
+        }
+
+        function mostrarPublicaciones(vacantes) {
+            const tbody = document.getElementById('publicacionesTabla');
+            tbody.innerHTML = ''; // Clear tbody before adding new content
+            vacantes.forEach(vacante => {
+                const row = document.createElement('tr');
+                row.id = `vacante-${vacante.id}`; // Add an ID to each row for easy removal
+                row.innerHTML = `
+                    <td>${vacante.id}</td>
+                    <td>${vacante.posicion}</td>
+                    <td>${vacante.empresa ? vacante.empresa.nombre : 'Desconocida'}</td>
+                    <td>${new Date(vacante.fechaPublicacion).toLocaleDateString()}</td>
+                    <td>${vacante.autorizado ? 'Autorizada' : 'Pendiente'}</td>
+                    <td>
+                        <button onclick="aprobarVacante(${vacante.id})" class="btn btn-success">Aprobar</button>
+                        <button onclick="rechazarVacante(${vacante.id})" class="btn btn-danger">Rechazar</button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        function aprobarEmpresa(id) {
+            fetch(`http://localhost:8080/api/admin/aprobar/${id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ password: 'somePassword' }) // Replace with actual password handling
+            })
+            .then(response => response.ok ? handleSuccessfulAction(id, 'solicitud') : response.text().then(text => alert('Error al aprobar empresa: ' + text)))
+            .catch(error => alert('Error al aprobar empresa: ' + error.message));
+        }
+
+        function rechazarEmpresa(id) {
+            const reason = prompt('Ingrese la razón del rechazo:');
+            if (reason) {
+                fetch(`http://localhost:8080/api/admin/rechazar/${id}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ reason })
+                })
+                .then(response => {
+                    if (response.ok) {
+                        return response.json();
+                    } else {
+                        return response.text().then(text => { throw new Error(text) });
+                    }
+                })
+                .then(data => {
+                    handleSuccessfulAction(id, 'solicitud');
+                })
+                .catch(error => alert('Error al rechazar empresa: ' + error.message));
+            }
+        }
+
+        function aprobarVacante(id) {
+            fetch(`http://localhost:8080/api/admin/aprobar-vacante/${id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => response.ok ? handleSuccessfulAction(id, 'vacante') : response.text().then(text => alert('Error al aprobar vacante: ' + text)))
+            .catch(error => alert('Error al aprobar vacante: ' + error.message));
+        }
+
+        function rechazarVacante(id) {
+            const reason = prompt('Ingrese la razón del rechazo:');
+            if (reason) {
+                fetch(`http://localhost:8080/api/admin/rechazar-vacante/${id}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ reason })
+                })
+                .then(response => {
+                    if (response.ok) {
+                        return response.json();
+                    } else {
+                        return response.text().then(text => { throw new Error(text) });
+                    }
+                })
+                .then(data => {
+                    handleSuccessfulAction(id, 'vacante');
+                })
+                .catch(error => alert('Error al rechazar vacante: ' + error.message));
+            }
+        }
+
+        function handleSuccessfulAction(id, type) {
+            alert('Acción realizada con éxito');
+            // Remove the row from the table
+            const row = document.getElementById(`${type}-${id}`);
+            if (row) {
+                row.remove();
+            }
+        }
+
+        function fetchApprovedUsers() {
+            fetch('http://localhost:8080/api/admin/aprobadas')
+                .then(response => response.json())
+                .then(data => mostrarUsuariosAprobados(data))
+                .catch(error => console.error('Error al cargar los usuarios aprobados:', error));
+        }
+
+        function mostrarUsuariosAprobados(usuarios) {
+            const tbody = document.getElementById('usuariosAprobadosTabla');
+            tbody.innerHTML = ''; // Clear tbody before adding new content
+            usuarios.forEach(usuario => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${usuario.nombre}</td>
+                    <td>${usuario.correoElectronico}</td>
+                    <td>${usuario.telefonoContacto}</td>
+                    <td>${usuario.ubicacion}</td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+    </script>
+</body>
+</html>
